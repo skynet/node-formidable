@@ -22,6 +22,8 @@ a large variety of clients and is considered production-ready.
 
 ## Installation
 
+This is a low level package, and if you're using a high level framework such as Express, chances are it's already included in it. You can [read this discussion](http://stackoverflow.com/questions/11295554/how-to-disable-express-bodyparser-for-file-uploads-node-js) about how Formidable is integrated with Express.
+
 Via [npm](http://github.com/isaacs/npm):
 ```
 npm install formidable@latest
@@ -82,11 +84,10 @@ form.encoding = 'utf-8';
 Sets encoding for incoming form fields.
 
 ```javascript
-form.uploadDir = process.env.TMP || process.env.TMPDIR || process.env.TEMP || '/tmp' || process.cwd();
+form.uploadDir = "/my/dir";
 ```
-The directory for placing file uploads in. You can move them later on using
-`fs.rename()`. The default directory is picked at module load time depending on
-the first existing directory from those listed above.
+Sets the directory for placing file uploads in. You can move them later on using
+`fs.rename()`. The default is `os.tmpDir()`.
 
 ```javascript
 form.keepExtensions = false;
@@ -106,10 +107,10 @@ If this value is exceeded, an `'error'` event is emitted. The default
 size is 2MB.
 
 ```javascript
-form.maxFields = 0;
+form.maxFields = 1000;
 ```
 Limits the number of fields that the querystring parser will decode. Defaults
-to 0 (unlimited).
+to 1000 (0 for unlimited).
 
 ```javascript
 form.hash = false;
@@ -129,7 +130,7 @@ The expected number of bytes in this form.
 ```javascript
 form.parse(request, [cb]);
 ```
-Parses an incoming node.js `request` containing form data. If `cb` is provided, all fields an files are collected and passed to the callback:
+Parses an incoming node.js `request` containing form data. If `cb` is provided, all fields and files are collected and passed to the callback:
 
 
 ```javascript
